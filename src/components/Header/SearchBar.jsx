@@ -12,8 +12,11 @@ const SearchBar = (props) => {
                 type='text' 
                 value=''
                 onClick={props.handleShow} 
-                onChange={props.handleShow} 
-                placeholder='Search by tags' />
+                onChange={props.handleShow}                 
+                placeholder={(!props.lang)
+                    ? 'Search by tags'
+                    : 'Поиск по тегам'
+                } />
         </Col>
     )
 }

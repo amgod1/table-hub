@@ -1,15 +1,15 @@
-import { React, useState, useEffect } from 'react'
+import { React, useEffect } from 'react'
 import { Route, Routes } from 'react-router-dom'
 import * as Axios from 'axios'
 import { ThemeProvider, createTheme } from '@mui/material/styles'
 import CssBaseline from '@mui/material/CssBaseline'
 import HeaderContainer from "./components/Header/HeaderContainer"
 import LogInContainer from "./components/Login/LogInContainer"
-import UsersContainer from "./components/Main/UsersContainer"
-import Profile from "./components/Main/Profile"
-import TableCreator from './components/Main/TableCreator'
-import Collection from './components/Main/Collection'
-import StartPage from './components/Main/StartPage'
+import UsersContainer from "./components/Users/UsersContainer"
+import Profile from "./components/Profile/Profile"
+import TableCreator from './components/Table/TableCreator'
+import Collection from './components/Table/Collection'
+import StartPage from './components/StartPage'
 import RouterWait from './components/RouterWait'
 
 const App = (props) => {
@@ -78,7 +78,7 @@ const App = (props) => {
         let searchTags = localStorage.search.split(' ').filter(el => el !== '')  
         let info = [...props.allCollectionsInfo].filter(el => {
           for (let item of searchTags) {
-            if (!el.tags.toLowerCase().includes(item.toLowerCase())) return 
+            if (!el.tags.toLowerCase().includes(item.toLowerCase())) return
           }
           return el
         })
@@ -116,8 +116,8 @@ const App = (props) => {
     renderAllCollections = clusters.map(el => <Route 
       path = {el[0]} 
       key = {el[2].id} 
-      element = {<Collection 
-        // filterTable = {props.filterTable}
+      element = {<Collection
+        lang = {props.lang} 
         theme = {props.theme}
         filterKey = {props.filterKey}
         isAdmin = {props.isAdmin}
@@ -128,7 +128,6 @@ const App = (props) => {
         title = {el[1].title}
         description = {el[1].description} 
         clusterInfo = {el} 
-        onFilterTable = {props.onFilterTable}
         onFilterKey = {props.onFilterKey}
         onRenderComment = {props.onRenderComment}
         allCommentsInfo = {props.allCommentsInfo}
@@ -141,12 +140,12 @@ const App = (props) => {
 
   let renderAllProfiles
   if (!!props.allUsersInfo && !!clusters.length) {
-    // let newUsersInfo = JSON.parse(JSON.stringify(props.allUsersInfo))
     renderAllProfiles = props.allUsersInfo
       .map(el => <Route 
         path={'/' + el.login} 
         key={el.id} 
-        element={<Profile 
+        element={<Profile
+          lang = {props.lang}
           clusters={clusters} 
           login={el.login} 
           admin={el.admin} 
@@ -172,23 +171,33 @@ const App = (props) => {
     return () => clearInterval(interval)
   })
   
-  if (!!clusters.length) {
-    return (
-      <ThemeProvider theme={theme}>
-        <CssBaseline />
-           <HeaderContainer />
-            <Routes>
-              <Route path = "/" element = {<StartPage clusters = {clustersMain} />} />
-              <Route path = '/create-table' element = {<TableCreator onSetCollectionsInfo={props.onSetCollectionsInfo} />} />
-              <Route path = "/log-in" element = {<LogInContainer />} />
-              <Route path = "/users" element = {<UsersContainer />} />
-              <Route path = "*" element = {<RouterWait />} />
-              { renderAllProfiles }
-              { renderAllCollections }
-            </Routes>
-      </ThemeProvider>
-    )
-  }
+
+  return (
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <HeaderContainer />
+      <Routes>
+        <Route path = "*" element = {<RouterWait lang = {props.lang} />} />
+        {(!!clusters.length) 
+          ? <>
+            <Route path = "/" element = {<StartPage clusters = {clustersMain} lang = {props.lang} />} />
+            <Route path = "/log-in" element = {<LogInContainer />} />
+            <Route path = "/users" element = {<UsersContainer />} />
+            <Route path = '/create-table' element = {<TableCreator
+              lang={props.lang} 
+              theme={props.theme}
+              onSetCollectionsInfo={props.onSetCollectionsInfo} 
+              allColumnsLinks={props.allColumnsInfo.map(el => el.link)} />} 
+            />
+            { renderAllProfiles }
+            { renderAllCollections }
+          </>
+          : <></>
+        }
+        
+      </Routes>
+    </ThemeProvider>
+  )
 }
 
 export default App

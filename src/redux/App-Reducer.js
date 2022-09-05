@@ -1,10 +1,9 @@
-import React from "react"
 import { createAction } from "@reduxjs/toolkit"
 import Axios from 'axios'
 
 const GET_USERS_INFO = 'GET_USERS_INFO'
 const CHANGE_THEME = 'CHANGE_THEME'
-const FILTER_TABLE = 'FILTER_TABLE' 
+const CHANGE_LANG = 'CHANGE_LANG'
 const FILTER_KEY = 'FILTER_KEY' 
 const GET_COLLECTIONS_INFO = 'GET_COLLECTIONS_INFO'
 const GET_COLUMNS_INFO = 'GET_COLUMNS_INFO'
@@ -21,13 +20,16 @@ let initialState = {
     allCollectionsInfo: '',
     allColumnsInfo: '',
     allCommentsInfo: '',
-    filterTable: 1,
     filterKey: '',
     theme: false,
+    lang: false
 }
 
 if (localStorage.theme === undefined) { localStorage.theme = false; initialState.theme = false} 
 else { initialState.theme = (localStorage.theme === 'true') ? true : false }
+
+if (localStorage.lang === undefined) { localStorage.lang = false; initialState.lang = false} 
+else { initialState.lang = (localStorage.lang === 'true') ? true : false }
 
 const appReducer = (state = initialState, action) => {
     switch (action.type) {
@@ -36,8 +38,9 @@ const appReducer = (state = initialState, action) => {
         case CHANGE_THEME:
             localStorage.theme = action.payload.theme
             return {...state, theme: action.payload.theme}
-        case FILTER_TABLE:
-            return {...state, filterTable: action.payload.filterTable}
+        case CHANGE_LANG:
+            localStorage.lang = action.payload.lang
+            return {...state, lang: action.payload.lang}
         case FILTER_KEY:
             return {...state, filterKey: action.payload.filterKey}
         case GET_COLLECTIONS_INFO:
@@ -56,7 +59,6 @@ const appReducer = (state = initialState, action) => {
         case GET_COMMENTS_INFO:
             return {...state, allCommentsInfo: action.payload.allComments }
         case RENDER_COMMENT:
-            console.log('SETTING COMMENT MY G', action.payload)
             Axios.post('http://localhost:3306/api/insert/comments', { 
                 login: action.payload.login,
                 link: action.payload.link,
@@ -117,7 +119,6 @@ const appReducer = (state = initialState, action) => {
                     id: action.payload.id
                 })
             } else if (!!action.payload.admin && !!action.payload.tags) {
-                console.log(action.payload)
                 Axios.post('http://localhost:3306/api/insert/collections/new', {
                     number1: action.payload.number1, 
                     number2: action.payload.number2, 
@@ -147,7 +148,7 @@ const appReducer = (state = initialState, action) => {
 
 export const getUsersInfoAC = createAction (GET_USERS_INFO, function prepare(allUsers) { return { payload: {allUsers} }})
 export const changeThemeAC = createAction (CHANGE_THEME, function prepare(theme) { return { payload: {theme} }})
-export const filterTableAC = createAction (FILTER_TABLE, function prepare(filterTable) { return { payload: {filterTable} }})
+export const changeLangAC = createAction (CHANGE_LANG, function prepare(lang) { return { payload: {lang} }})
 export const filterKeyAC = createAction (FILTER_KEY, function prepare(filterKey) { return { payload: {filterKey} }})
 export const getCollectionsInfoAC = createAction (GET_COLLECTIONS_INFO, function prepare(allCollections) { return { payload: {allCollections} }})
 export const getColumnsInfoAC = createAction (GET_COLUMNS_INFO, function prepare(allColumns) { return { payload: {allColumns} }})

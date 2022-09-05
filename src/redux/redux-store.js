@@ -14,9 +14,7 @@ let store = configureStore({
         immutableCheck: false,
         serializableCheck: false
     })
-}) 
+})
 
-console.log(store)
-
-export default store
 window.store = store
+export default store

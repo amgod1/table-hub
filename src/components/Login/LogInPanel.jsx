@@ -14,12 +14,20 @@ const LogInPanel = (props) => {
                     localStorage.setItem('login', user[0].login) 
                     props.onLoginIn(user[0])
                 } else { 
-                    setError('Account with this login is blocked! Create new one!')
+                    (!props.lang)
+                        ? setError('Account with this login is blocked! Create new one!')
+                        : setError('Аккаунт с данным логином заблокирован! Создайте новый!') 
                     handleShow() 
                     props.onLoginInChange('')
                     props.onPasswordInChange('')
                 }
-            } else { setError('Invalid login or password'); handleShow() }
+            } else { 
+                (!props.lang)
+                    ? setError('Invalid login or password') 
+                    : setError('Неверный логин или пароль') 
+                    
+                handleShow() 
+            }
         })
     }
   
@@ -32,11 +40,14 @@ const LogInPanel = (props) => {
         let text = e.target.value
         props.onPasswordInChange(text)
     }
-  
+
     let loginInput = [
         {key: 1, type: 'text', placeholder: 'login', value: props.loginIn, onChange: onLoginInChange},
         {key: 2, type: 'password', placeholder: 'password', value: props.passwordIn, onChange: onPasswordInChange, id: 'inputPassword5'},
     ]
+
+    if (props.lang) { loginInput[0].placeholder = 'логин'; loginInput[1].placeholder = 'пароль'}
+
     let loginMenu = loginInput.map(el => 
         <FormControl 
             placeholder={el.placeholder} 
@@ -57,21 +68,32 @@ const LogInPanel = (props) => {
     return (
         (props.isLogged)
             ? <Alert variant={'success'} className='mt-5 h-100 text-center'>
-                Congratulations!!! You logged in your account!
+                {(!props.lang)
+                    ? `Congratulations!!! You logged in your account!`
+                    : `Ура!!! Вы вошли в свой аккаунт!`
+                }
             </Alert>
             : <>
             <div>
                 <Row className='mt-5'>
-                    Log in to your account:
+                    {(!props.lang)
+                        ? `Log in to your account:`
+                        : `Войти в свой аккаунт:`
+                    }  
                 </Row>
                 { loginMenu }
                 <Row>
                     <Button className='mt-3' onClick={ onLoginIn }>
-                        Log In
+                        {(!props.lang)
+                            ? `Log In`
+                            : `Войти`
+                        }
+                        
                     </Button>
                 </Row>
             </div>
                 <LogInModal 
+                    lang = {props.lang}
                     theme = {props.theme}
                     error = {error}
                     show = {show}

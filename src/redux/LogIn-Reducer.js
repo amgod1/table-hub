@@ -74,7 +74,6 @@ const logInReducer = (state = initialState, action) => {
         case UPDATE_PASSWORD_REG:
             return { ...state, passwordReg: action.payload.newPasswordReg }
         case ADMIN_YOURSELF:
-            console.log('we got new info:', action.payload.newInfo)
             if (action.payload.newInfo.blocked === 1) { 
                 localStorage.clear()
                 return {...state, userInfo: '', headerInfo: {isBlocked: 1, isLogged: 0, isAdmin: 0} }

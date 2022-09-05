@@ -14,6 +14,7 @@ let mapStateToProps = (state) => {
         passwordReg: state.logInPage.passwordReg,
         allUsersInfo: state.appPage.allUsersInfo,
         theme: state.appPage.theme,
+        lang: state.appPage.lang
     }
 }
 

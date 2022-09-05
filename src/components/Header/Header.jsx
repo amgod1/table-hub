@@ -18,14 +18,17 @@ const Header = (props) => {
 
     return (
         <Container className='border border-primary rounded-bottom bg-primary'>
-            <Row className='my-3 d-flex justify-content-center flex-column flex-sm-row' >
+            <Row className='my-3 d-flex justify-content-center flex-column flex-md-row' >
                 <SearchBar 
                     allCollectionsInfo = {props.allCollectionsInfo} 
                     handleShow={handleShow} 
+                    lang = {props.lang}
                 />
                 <br />
                 <HeaderButtons
+                    lang = {props.lang}
                     theme = {props.theme}
+                    onChangeLang = {props.onChangeLang}
                     onChangeTheme = {props.onChangeTheme}
                     isBlocked = {props.isBlocked} 
                     isLogged = {props.isLogged} 
@@ -34,6 +37,7 @@ const Header = (props) => {
                 />
             </Row>
             <SearchModal 
+                lang = {props.lang}
                 theme = {props.theme}
                 show = {show}
                 search = {search}

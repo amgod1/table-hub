@@ -1,6 +1,6 @@
 import App from '../../App'
 import { connect } from 'react-redux'
-import { getUsersInfoAC, filterTableAC, filterKeyAC, getCollectionsInfoAC, getColumnsInfoAC, getSearchDataAC, changeTitleAC, getCommentsAC, renderCommentAC, setCollectionsAC, updateTableHeadAC } from '../../redux/App-Reducer'
+import { getUsersInfoAC, filterKeyAC, getCollectionsInfoAC, getColumnsInfoAC, getSearchDataAC, changeTitleAC, getCommentsAC, renderCommentAC, setCollectionsAC, updateTableHeadAC } from '../../redux/App-Reducer'
 import { adminYourselfAC } from '../../redux/LogIn-Reducer'
 
 let mapStateToProps = (state) => {
@@ -11,18 +11,17 @@ let mapStateToProps = (state) => {
         allColumnsInfo: state.appPage.allColumnsInfo,
         allCommentsInfo: state.appPage.allCommentsInfo,
         theme: state.appPage.theme,
-        filterTable: state.appPage.filterTable,
         filterKey: state.appPage.filterKey,
         userInfo: state.logInPage.userInfo,
         isAdmin: state.logInPage.headerInfo.isAdmin,
-        isLogged: state.logInPage.headerInfo.isLogged
+        isLogged: state.logInPage.headerInfo.isLogged,
+        lang: state.appPage.lang
     }
 }
 
 let mapDispatchToProps = (dispatch) => {
     return {
         onAdminYourself: (i) => dispatch(adminYourselfAC(i)),
-        onFilterTable: (i) => dispatch(filterTableAC(i)),
         onFilterKey: (i) => dispatch(filterKeyAC(i)),
         onGetUsersInfo: (i) => dispatch(getUsersInfoAC(i)),
         onGetCollectionsInfo: (i) => dispatch(getCollectionsInfoAC(i)),
